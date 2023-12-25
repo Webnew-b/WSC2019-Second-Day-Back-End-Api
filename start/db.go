@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 	"wscmakebygo.com/global"
+	"wscmakebygo.com/tools"
 )
 
 func crateDbAddr() string {
@@ -24,8 +24,8 @@ func crateDbAddr() string {
 func crateDbConnect() {
 	logStr := fmt.Sprintf("%s:%d", global.Config.Db.Host, global.Config.Db.Port)
 	addr := crateDbAddr()
-	log.Println("crate Db connection:" + logStr)
 	db, err := gorm.Open(mysql.Open(addr), &gorm.Config{})
+	tools.Log.Println("created Db connection:" + logStr)
 	if err != nil {
 		panic(err)
 	}

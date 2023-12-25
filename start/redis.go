@@ -20,6 +20,7 @@ func crateRedisConnect() {
 		Password: global.Config.Redis.Password, // no password set
 		DB:       global.Config.Redis.DB,       // use default DB
 	})
+	tools.Log.Println("created Redis connection:" + logStr)
 	global.Rdb = rdb
 	tools.Log.Println("Connect Redis success")
 }
