@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"wscmakebygo.com/config"
 	"wscmakebygo.com/global"
+	"wscmakebygo.com/tools"
 )
 
 func unmarshalConfigYaml(yamlFile []byte) *config.Config {
@@ -17,8 +18,10 @@ func unmarshalConfigYaml(yamlFile []byte) *config.Config {
 }
 
 func createConfig() {
+	tools.Log.Println("get Config")
 	yamlFile := config.ReadYamlFile()
 	_config := unmarshalConfigYaml(yamlFile)
+	// todo 判断对应需要配置的配置值是否为空
 	global.Config = _config
 }
 

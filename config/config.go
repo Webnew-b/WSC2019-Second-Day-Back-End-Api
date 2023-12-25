@@ -7,10 +7,12 @@ import (
 )
 
 type Config struct {
-	App *App   `yaml:"app"`
-	Log *Log   `yaml:"log"`
 	Env string `yaml:"env"`
-	Db  *Db    `yaml:"db"`
+
+	App   *App   `yaml:"app"`
+	Log   *Log   `yaml:"log"`
+	Db    *Db    `yaml:"db"`
+	Redis *Redis `yaml:"redis"`
 }
 
 // 以下是2层，三层往下添加对应结构体
@@ -34,8 +36,19 @@ type Db struct {
 	Port     int    `yaml:"port"`
 }
 
+type Redis struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Password string `yaml:"password"`
+	DB       int    `yaml:"db"`
+}
+
 func ReadYamlFile() []byte {
-	workingPath := tools.GetWorkingDir()
+	workingPath, err := tools.GetWorkingDir()
+	if err != nil {
+		//todo 如果文件不存在，自动生成配置文件
+		panic(err)
+	}
 	path := filepath.Join(workingPath, "config/config.yml")
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {

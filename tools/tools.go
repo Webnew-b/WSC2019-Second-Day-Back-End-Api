@@ -8,7 +8,7 @@ import (
 
 func createLogger() {
 	log.Println("crating Log")
-	cwd := GetWorkingDir()
+	cwd, _ := GetWorkingDir()
 	logDir := makeLogDir(cwd)
 	file := openLogFile(logDir)
 

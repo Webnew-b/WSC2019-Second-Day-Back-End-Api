@@ -4,3 +4,61 @@ INFO: 2023/12/23 15:50:46 start.go:6: Server Start
 INFO: 2023/12/23 15:51:16 start.go:6: Server Start
 INFO: 2023/12/23 15:51:36 start.go:6: Server Start
 INFO: 2023/12/23 15:52:05 start.go:6: Server Start
+INFO: 2023/12/25 14:17:26 start.go:6: Server is Starting
+INFO: 2023/12/25 14:17:26 config.go:21: get Config
+INFO: 2023/12/25 14:17:27 redis.go:16: Connecting Redis
+INFO: 2023/12/25 14:17:27 redis.go:24: Connect Redis success
+INFO: 2023/12/25 14:19:07 start.go:6: Server is Starting
+INFO: 2023/12/25 14:19:07 config.go:21: get Config
+INFO: 2023/12/25 14:19:07 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 14:19:07 redis.go:16: Connecting Redis
+INFO: 2023/12/25 14:19:07 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 14:19:07 redis.go:25: Connect Redis success
+INFO: 2023/12/25 17:44:33 start.go:6: Server is Starting
+INFO: 2023/12/25 17:44:33 config.go:21: get Config
+INFO: 2023/12/25 17:44:33 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 17:44:33 redis.go:16: Connecting Redis
+INFO: 2023/12/25 17:44:33 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 17:44:33 redis.go:25: Connect Redis success
+INFO: 2023/12/25 17:45:41 start.go:6: Server is Starting
+INFO: 2023/12/25 17:45:41 config.go:21: get Config
+INFO: 2023/12/25 17:45:41 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 17:45:41 redis.go:16: Connecting Redis
+INFO: 2023/12/25 17:45:41 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 17:45:41 redis.go:25: Connect Redis success
+INFO: 2023/12/25 17:49:07 start.go:6: Server is Starting
+INFO: 2023/12/25 17:49:07 config.go:21: get Config
+INFO: 2023/12/25 17:49:07 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 17:49:07 redis.go:16: Connecting Redis
+INFO: 2023/12/25 17:49:07 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 17:49:07 redis.go:25: Connect Redis success
+INFO: 2023/12/25 17:51:21 start.go:6: Server is Starting
+INFO: 2023/12/25 17:51:21 config.go:21: get Config
+INFO: 2023/12/25 17:51:21 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 17:51:21 redis.go:16: Connecting Redis
+INFO: 2023/12/25 17:51:21 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 17:51:21 redis.go:25: Connect Redis success
+INFO: 2023/12/25 17:51:57 start.go:6: Server is Starting
+INFO: 2023/12/25 17:51:57 config.go:21: get Config
+INFO: 2023/12/25 17:51:57 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 17:51:57 redis.go:16: Connecting Redis
+INFO: 2023/12/25 17:51:57 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 17:51:57 redis.go:25: Connect Redis success
+INFO: 2023/12/25 17:52:46 start.go:6: Server is Starting
+INFO: 2023/12/25 17:52:46 config.go:21: get Config
+INFO: 2023/12/25 17:52:46 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 17:52:46 redis.go:16: Connecting Redis
+INFO: 2023/12/25 17:52:46 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 17:52:46 redis.go:25: Connect Redis success
+INFO: 2023/12/25 18:03:18 start.go:6: Server is Starting
+INFO: 2023/12/25 18:03:18 config.go:21: get Config
+INFO: 2023/12/25 18:03:18 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 18:03:18 redis.go:16: Connecting Redis
+INFO: 2023/12/25 18:03:18 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 18:03:18 redis.go:25: Connect Redis success
+INFO: 2023/12/25 18:11:15 start.go:6: Server is Starting
+INFO: 2023/12/25 18:11:15 config.go:21: get Config
+INFO: 2023/12/25 18:11:15 db.go:28: created Db connection:192.168.1.122:3306
+INFO: 2023/12/25 18:11:15 redis.go:16: Connecting Redis
+INFO: 2023/12/25 18:11:15 redis.go:23: created Redis connection:127.0.0.1:6379
+INFO: 2023/12/25 18:11:15 redis.go:25: Connect Redis success
