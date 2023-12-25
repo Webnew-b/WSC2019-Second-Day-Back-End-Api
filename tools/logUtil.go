@@ -10,12 +10,12 @@ var (
 	Log *log.Logger
 )
 
-func GetWorkingDir() string {
+func GetWorkingDir() (string, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
-		log.Fatalf("获取当前目录失败: %v", err)
+		return "", err
 	}
-	return cwd
+	return cwd, nil
 }
 
 func makeLogDir(path string) string {

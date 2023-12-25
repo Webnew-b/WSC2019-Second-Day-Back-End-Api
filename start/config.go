@@ -21,6 +21,7 @@ func createConfig() {
 	tools.Log.Println("get Config")
 	yamlFile := config.ReadYamlFile()
 	_config := unmarshalConfigYaml(yamlFile)
+	// todo 判断对应需要配置的配置值是否为空
 	global.Config = _config
 }
 

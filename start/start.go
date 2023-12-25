@@ -11,6 +11,11 @@ func Init() {
 	tools.Log.Println("Server is Started")
 }
 
+func StartDbConnect() {
+	createConfig()
+	crateDbConnect()
+}
+
 func StopServe() {
 	tools.Log.Println("stopping Server")
 }

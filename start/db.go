@@ -9,7 +9,7 @@ import (
 )
 
 func crateDbAddr() string {
-	Addr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=%s",
+	Addr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=%s&parseTime=true",
 		global.Config.Db.User,
 		global.Config.Db.Password,
 		global.Config.Db.Host,

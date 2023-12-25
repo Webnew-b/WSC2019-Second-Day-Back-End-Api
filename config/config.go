@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
+	Env string `yaml:"env"`
+
 	App   *App   `yaml:"app"`
 	Log   *Log   `yaml:"log"`
-	Env   string `yaml:"env"`
 	Db    *Db    `yaml:"db"`
 	Redis *Redis `yaml:"redis"`
 }
@@ -43,7 +44,11 @@ type Redis struct {
 }
 
 func ReadYamlFile() []byte {
-	workingPath := tools.GetWorkingDir()
+	workingPath, err := tools.GetWorkingDir()
+	if err != nil {
+		//todo 如果文件不存在，自动生成配置文件
+		panic(err)
+	}
 	path := filepath.Join(workingPath, "config/config.yml")
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {
