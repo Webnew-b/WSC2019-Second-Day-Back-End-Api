@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"wscmakebygo.com/config"
 	"wscmakebygo.com/global"
+	"wscmakebygo.com/tools"
 )
 
 func unmarshalConfigYaml(yamlFile []byte) *config.Config {
@@ -17,6 +18,7 @@ func unmarshalConfigYaml(yamlFile []byte) *config.Config {
 }
 
 func createConfig() {
+	tools.Log.Println("get Config")
 	yamlFile := config.ReadYamlFile()
 	_config := unmarshalConfigYaml(yamlFile)
 	global.Config = _config

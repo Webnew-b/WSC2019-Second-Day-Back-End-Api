@@ -10,5 +10,9 @@ db:
   db_name: WSC_api
   charset: utf8mb4
   loc: Local
-
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password:
+  db: 0
 

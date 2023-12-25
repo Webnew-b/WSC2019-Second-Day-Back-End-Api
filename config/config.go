@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	App *App   `yaml:"app"`
-	Log *Log   `yaml:"log"`
-	Env string `yaml:"env"`
-	Db  *Db    `yaml:"db"`
+	App   *App   `yaml:"app"`
+	Log   *Log   `yaml:"log"`
+	Env   string `yaml:"env"`
+	Db    *Db    `yaml:"db"`
+	Redis *Redis `yaml:"redis"`
 }
 
 // 以下是2层，三层往下添加对应结构体
@@ -32,6 +33,13 @@ type Db struct {
 	Loc      string `yaml:"loc"`
 	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
+}
+
+type Redis struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Password string `yaml:"password"`
+	DB       int    `yaml:"db"`
 }
 
 func ReadYamlFile() []byte {
