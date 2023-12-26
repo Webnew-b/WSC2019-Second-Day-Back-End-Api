@@ -18,4 +18,5 @@ func StartDbConnect() {
 
 func StopServe() {
 	tools.Log.Println("stopping Server")
+	// todo 停止日志读写以及清退存在的协程
 }

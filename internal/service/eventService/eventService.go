@@ -22,20 +22,19 @@ func GetAllEventAndOrganizer() (*[]api.ApiEvent, error) {
 }
 
 func buildApiEvent(events *[]model.Events) (*[]api.ApiEvent, error) {
-	var apiEvents []api.ApiEvent
-	for _, event := range *events {
+	var apiEvents = make([]api.ApiEvent, len(*events))
+	for index, event := range *events {
 		organizer, err := organizerDao.GetOrganizerInfoById(event.OrganizerId)
 		if err != nil {
 			return nil, err
 		}
-		apiEvent := api.ApiEvent{
+		apiEvents[index] = api.ApiEvent{
 			ID:        event.ID,
 			Name:      event.Name,
 			Slug:      event.Slug,
 			Date:      event.Date,
 			Organizer: organizer,
 		}
-		apiEvents = append(apiEvents, apiEvent)
 	}
 	return &apiEvents, nil
 }
