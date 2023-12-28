@@ -1,9 +1,13 @@
 package organizerDao
 
 import (
+	"errors"
+	"gorm.io/gorm"
 	"wscmakebygo.com/api"
 	"wscmakebygo.com/global"
+	"wscmakebygo.com/internal/apperrors/organizerError"
 	"wscmakebygo.com/internal/model"
+	"wscmakebygo.com/tools"
 )
 
 func GetOrganizerInfoById(id int64) (*api.ApiOrganizer, error) {
@@ -18,9 +22,20 @@ func GetOrganizerInfoById(id int64) (*api.ApiOrganizer, error) {
 func GetOrganizerIdBySlug(slug string) (int64, error) {
 	var organizer api.ApiOrganizer
 	data := global.DB.Model(&model.Organizers{}).Where(api.ApiOrganizer{Slug: slug}, "slug").First(&organizer)
-	if data.Error != nil {
-		// todo 要对找不到做一个处理
-		return 0, data.Error
+	err := checkedError(data.Error, slug)
+	if err != nil {
+		return 0, err
 	}
 	return organizer.ID, nil
+}
+
+func checkedError(err error, msg string) error {
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+		tools.Log.Println(msg, "organizer is not found")
+		return &organizerError.OrganizerSlugNotFoundError{}
+	case err != nil:
+		return err
+	}
+	return nil
 }

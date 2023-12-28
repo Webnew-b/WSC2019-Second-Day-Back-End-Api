@@ -1,10 +1,14 @@
 package eventDao
 
 import (
+	"errors"
+	"gorm.io/gorm"
 	"wscmakebygo.com/api"
 	"wscmakebygo.com/global"
+	"wscmakebygo.com/internal/apperrors/eventError"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/internal/params/eventParams"
+	"wscmakebygo.com/tools"
 )
 
 func GetAllEvent() (*[]model.Events, error) {
@@ -22,9 +26,21 @@ func GetEventDetail(param eventParams.EventFetchDao) (*api.EventDetailData, erro
 		OrganizerId: param.OrgId,
 		Slug:        param.EvSlug,
 	}).First(&event)
-	if data.Error != nil {
-		//todo 要对找不到做一个处理。
-		return nil, data.Error
+	err := checkedError(data.Error, param.EvSlug)
+	if err != nil {
+		return nil, err
 	}
+
 	return &event, nil
+}
+
+func checkedError(err error, msg string) error {
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+		tools.Log.Println(msg, "event is not found")
+		return &eventError.EventSlugNotFoundError{}
+	case err != nil:
+		return err
+	}
+	return nil
 }

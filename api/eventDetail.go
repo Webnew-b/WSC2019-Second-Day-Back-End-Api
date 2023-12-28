@@ -21,7 +21,7 @@ type EventDetailSessions struct {
 	Start       *DateTime `json:"start"`
 	End         *DateTime `json:"end"`
 	Type        string    `json:"type"`
-	Cost        float64   `json:"cost"`
+	Cost        *float64  `json:"cost"`
 }
 
 type EventDetailRooms struct {
@@ -36,9 +36,9 @@ type EventDetailChannels struct {
 }
 
 type EventDetailTickets struct {
-	ID          int64   `json:"id"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Cost        float64 `json:"cost"`
-	Available   bool    `json:"available"`
+	ID          int64                `json:"id"`
+	Name        string               `json:"name"`
+	Description *string              `json:"description" gorm:"-"`
+	Cost        *Float64TwoPrecision `json:"cost"`
+	Available   bool                 `json:"available" gorm:"-"`
 }

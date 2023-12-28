@@ -1,9 +1,12 @@
 package eventsController
 
 import (
+	"errors"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"wscmakebygo.com/api"
+	"wscmakebygo.com/internal/apperrors/eventError"
+	"wscmakebygo.com/internal/apperrors/organizerError"
 	"wscmakebygo.com/internal/controller"
 	"wscmakebygo.com/internal/params/eventParams"
 	"wscmakebygo.com/internal/service/eventService"
@@ -28,14 +31,23 @@ func GetEventDetail(c echo.Context) error {
 	}
 	err := controller.Validator.Struct(eventFetchRequest)
 	if err != nil {
-		//todo 需要做一个全体的错误处理
-		tools.Log.Println(err.Error())
-		return err
+		return handleEventDetailError(err)
 	}
+
 	res, err := eventService.FetchEventDetail(eventFetchRequest)
 	if err != nil {
-		tools.Log.Println(err.Error())
-		return err
+		return handleEventDetailError(err)
 	}
+
 	return c.JSON(http.StatusOK, res)
+}
+
+func handleEventDetailError(err error) error {
+	tools.Log.Println(err.Error())
+	switch {
+	case errors.Is(err, &eventError.EventSlugNotFoundError{}),
+		errors.Is(err, &organizerError.OrganizerSlugNotFoundError{}):
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	}
+	return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 }

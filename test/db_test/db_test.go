@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"testing"
+	"wscmakebygo.com/api"
 	"wscmakebygo.com/global"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/start"
@@ -15,21 +16,22 @@ import (
 var (
 	event  model.Events
 	events []model.Events
+	ticket api.EventDetailTickets
 )
 
 func TestDb(t *testing.T) {
-	test.ChangeDir()
+	/*test.ChangeDir()
 	start.StartDbConnect()
-	data := global.DB.Select("slug", "name").Find(&events)
+	data := global.DB.Model(&model.EventTickets{}).Find(&ticket)
 	if data.Error != nil {
-		tools.Log.Println("123456")
-		tools.Log.Fatal(data.Error, "123456")
+		tools.Log.Fatal(data.Error.Error())
 	}
-	str, err := tools.JsonMarshal(events)
+	tools.Log.Println(ticket.Cost)*/
+	str, err := tools.JsonMarshal(ticket)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(string(str))
+	tools.Log.Println(string(str))
 }
 
 func TestGetDirPath(t *testing.T) {
@@ -49,4 +51,8 @@ func TestGetDirPath(t *testing.T) {
 		log.Fatal(err)
 	}
 	log.Println(string(str))
+}
+
+func TestLogPrint(t *testing.T) {
+	log.Println("aaa", "bbb")
 }
