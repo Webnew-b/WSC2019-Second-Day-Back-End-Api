@@ -65,12 +65,12 @@ func buildEventDetailTickets(tickets *[]model.EventTickets) *[]api.EventDetailTi
 func getDescription(item specialValidity, ticketId int64) string {
 	switch item.Type {
 	case typeDate:
-		date, err := parseDate(item.TicketDate)
+		date, err := tools.ParseTicketDate(item.TicketDate)
 		if err != nil {
 			tools.Log.Println(err.Error())
 			return fmt.Sprintf("Available until %s", item.TicketDate)
 		}
-		return fmt.Sprintf("Available until %s", formatDate(date))
+		return fmt.Sprintf("Available until %s", tools.FormatTicketDate(date))
 	case typeAmount:
 		amount := registrationsDao.CountTicketReg(ticketId)
 		if amount >= item.Amount {
@@ -82,27 +82,10 @@ func getDescription(item specialValidity, ticketId int64) string {
 	}
 }
 
-// todo 将这两个封装到tools里面去
-func formatDate(date time.Time) string {
-	newFormat := "January 2, 2006"
-	formattedDate := date.Format(newFormat)
-	return formattedDate
-}
-
-func parseDate(dateStr string) (time.Time, error) {
-	const layout = "2006-01-02"
-
-	date, err := time.Parse(layout, dateStr)
-	if err != nil {
-		return time.Time{}, err
-	}
-	return date, nil
-}
-
 func getAvailable(item specialValidity, ticketId int64) bool {
 	switch item.Type {
 	case typeDate:
-		date, err := parseDate(item.TicketDate)
+		date, err := tools.ParseTicketDate(item.TicketDate)
 		if err != nil {
 			tools.Log.Println(err.Error())
 			return false
