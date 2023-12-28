@@ -38,28 +38,31 @@ func buildEventDetailTickets(tickets *[]model.EventTickets) *[]api.EventDetailTi
 	list := make([]api.EventDetailTickets, len(*tickets))
 
 	for index, ticket := range *tickets {
-		var item specialValidity
-		res := newEventDetailTicket(ticket)
-
-		if ticket.SpecialValidity != "" {
-			err := tools.JsonUnmarshal([]byte(ticket.SpecialValidity), &item)
-			if err != nil {
-				tools.Log.Println(err.Error())
-				list[index] = *res
-				continue
-			}
-		} else {
-			res.Available = true
-			list[index] = *res
-			continue
-		}
-
-		des := getDescription(item, ticket.ID)
-		res.Description = &des
-		res.Available = getAvailable(item, ticket.ID)
-		list[index] = *res
+		list[index] = processEventTicket(ticket)
 	}
 	return &list
+}
+
+func processEventTicket(ticket model.EventTickets) api.EventDetailTickets {
+	var item specialValidity
+	res := newEventDetailTicket(ticket)
+
+	if ticket.SpecialValidity != "" {
+		err := tools.JsonUnmarshal([]byte(ticket.SpecialValidity), &item)
+		if err != nil {
+			tools.Log.Println(err.Error())
+			return *res
+		}
+	} else {
+		res.Available = true
+		return *res
+	}
+
+	des := getDescription(item, ticket.ID)
+	res.Description = &des
+	res.Available = getAvailable(item, ticket.ID)
+
+	return *res
 }
 
 func getDescription(item specialValidity, ticketId int64) string {
