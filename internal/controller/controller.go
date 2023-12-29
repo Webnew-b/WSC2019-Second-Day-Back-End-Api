@@ -4,4 +4,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var Validator = validator.New()
+var valid = validator.New()
+
+func GetValidator() *validator.Validate {
+	return valid
+}

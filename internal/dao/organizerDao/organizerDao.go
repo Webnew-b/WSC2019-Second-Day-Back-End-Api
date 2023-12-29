@@ -21,7 +21,7 @@ func GetOrganizerInfoById(id int64) (*api.ApiOrganizer, error) {
 
 func GetOrganizerIdBySlug(slug string) (int64, error) {
 	var organizer api.ApiOrganizer
-	data := database.GetDatabase().Model(&model.Organizers{}).Where(api.ApiOrganizer{Slug: slug}, "slug").First(&organizer)
+	data := database.GetDatabase().Model(&model.Organizers{}).Where(&api.ApiOrganizer{Slug: slug}, "slug").First(&organizer)
 	err := checkedError(data.Error, slug)
 	if err != nil {
 		return 0, err

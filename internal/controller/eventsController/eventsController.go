@@ -29,7 +29,7 @@ func GetEventDetail(c echo.Context) error {
 		OrgSlug: c.Param("organizerSlug"),
 		EvSlug:  c.Param("eventSlug"),
 	}
-	err := controller.Validator.Struct(eventFetchRequest)
+	err := controller.GetValidator().Struct(eventFetchRequest)
 	if err != nil {
 		return handleEventDetailError(err)
 	}
