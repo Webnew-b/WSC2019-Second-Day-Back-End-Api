@@ -2,13 +2,13 @@ package channelsDao
 
 import (
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global"
+	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/model"
 )
 
 func FetchChannelByEventId(id int64) (*[]api.EventDetailChannels, error) {
 	var channels []api.EventDetailChannels
-	data := global.DB.
+	data := database.GetDatabase().
 		Model(&model.Channels{}).
 		Select("id", "name").
 		Where(&model.Channels{EventId: id}).Find(&channels)

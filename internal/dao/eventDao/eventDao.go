@@ -4,7 +4,7 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global"
+	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/apperrors/eventError"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/internal/params/eventParams"
@@ -13,7 +13,7 @@ import (
 
 func GetAllEvent() (*[]model.Events, error) {
 	var events []model.Events
-	data := global.DB.Find(&events)
+	data := database.GetDatabase().Find(&events)
 	if data.Error != nil {
 		return nil, data.Error
 	}
@@ -22,7 +22,7 @@ func GetAllEvent() (*[]model.Events, error) {
 
 func GetEventDetail(param eventParams.EventFetchDao) (*api.EventDetailData, error) {
 	var event api.EventDetailData
-	data := global.DB.Model(&model.Events{}).Where(&model.Events{
+	data := database.GetDatabase().Model(&model.Events{}).Where(&model.Events{
 		OrganizerId: param.OrgId,
 		Slug:        param.EvSlug,
 	}).First(&event)

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global"
+	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/dao/registrationsDao"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/tools"
@@ -24,7 +24,7 @@ type specialValidity struct {
 func FetchTicketByEventId(id int64) (*[]api.EventDetailTickets, error) {
 	var tickets []model.EventTickets
 
-	data := global.DB.
+	data := database.GetDatabase().
 		Where(&model.EventTickets{EventId: id}).Find(&tickets)
 	if data.Error != nil {
 		return nil, data.Error

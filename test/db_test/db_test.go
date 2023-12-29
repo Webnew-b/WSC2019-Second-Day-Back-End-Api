@@ -6,7 +6,7 @@ import (
 	"log"
 	"testing"
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global"
+	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/start"
 	"wscmakebygo.com/test"
@@ -37,7 +37,7 @@ func TestDb(t *testing.T) {
 func TestGetDirPath(t *testing.T) {
 	test.ChangeDir()
 	start.StartDbConnect()
-	data := global.DB.First(&event, 6)
+	data := database.GetDatabase().First(&event, 6)
 	if errors.Is(data.Error, gorm.ErrRecordNotFound) {
 		// 如果没有找到记录，这里可以处理错误，比如抛出一个自定义错误或进行日志记录
 		log.Fatalf("Error: Record not found for user with ID %d", 6)

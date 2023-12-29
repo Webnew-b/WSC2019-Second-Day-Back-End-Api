@@ -2,13 +2,13 @@ package sessionsDao
 
 import (
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global"
+	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/model"
 )
 
 func FetchSessionsByRoomId(id int64) (*[]api.EventDetailSessions, error) {
 	var rooms []api.EventDetailSessions
-	data := global.DB.
+	data := database.GetDatabase().
 		Model(&model.Sessions{}).
 		Where(&model.Sessions{RoomId: id}).
 		Find(&rooms)

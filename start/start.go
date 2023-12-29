@@ -1,19 +1,28 @@
 package start
 
-import "wscmakebygo.com/tools"
+import (
+	"wscmakebygo.com/global/database"
+	"wscmakebygo.com/global/envConfig"
+	"wscmakebygo.com/global/redisConn"
+	"wscmakebygo.com/global/route"
+	"wscmakebygo.com/internal"
+	"wscmakebygo.com/tools"
+)
 
 func Init() {
 	tools.Log.Println("Server is Starting")
-	createConfig()
-	crateDbConnect()
-	crateRedisConnect()
-	createHttpServer()
+	envConfig.InitVal()
+	database.InitVal()
+	redisConn.InitVal()
+	route.InitVal()
+	internal.HookRoute()
+	route.StartRoute()
 	tools.Log.Println("Server is Started")
 }
 
 func StartDbConnect() {
-	createConfig()
-	crateDbConnect()
+	envConfig.InitVal()
+	database.InitVal()
 }
 
 func StopServe() {
