@@ -6,6 +6,7 @@ type LoginRequest struct {
 }
 
 type LoginRes struct {
+	Id        int64
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 	Username  string `json:"username"`

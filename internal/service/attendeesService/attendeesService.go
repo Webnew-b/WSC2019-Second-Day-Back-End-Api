@@ -3,6 +3,7 @@ package attendeesService
 import (
 	"crypto/md5"
 	"fmt"
+	"strconv"
 	"strings"
 	"wscmakebygo.com/api"
 	"wscmakebygo.com/global/constant"
@@ -18,7 +19,7 @@ func AttendeesLogin(params api.LoginRequest) (*api.LoginRes, error) {
 		return nil, err
 	}
 	token := createToken(attendees.Lastname)
-	err = saveToken(token)
+	err = saveToken(token, attendees.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -42,9 +43,9 @@ func createToken(lastname string) string {
 	return hexToken
 }
 
-func saveToken(token string) error {
+func saveToken(token string, id int64) error {
 	key := fmt.Sprintf("%s%s", constant.ATTENDEE_LOGIN_PREFIX, token)
-	err := redisUtil.SetData(key, token)
+	err := redisUtil.SetData(key, strconv.FormatInt(id, 10))
 	if err != nil {
 		return err
 	}

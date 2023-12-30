@@ -18,3 +18,10 @@ type LoginKeyNotExist struct {
 func (e *LoginKeyNotExist) Error() string {
 	return "Invalid token"
 }
+
+type NotLogin struct {
+}
+
+func (e *NotLogin) Error() string {
+	return "User not logged in"
+}
