@@ -21,7 +21,7 @@ func GetData(key string) (string, error) {
 func SetData(key string, value string) error {
 	err := redisConn.
 		GetRedis().
-		SetEX(ctx, key, value, time.Millisecond*constant.ATTENDEE_LOGIN_TIMEOUT).
+		SetEX(ctx, key, value, time.Second*constant.ATTENDEE_LOGIN_TIMEOUT).
 		Err()
 	if err != nil {
 		return err
