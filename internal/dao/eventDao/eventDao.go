@@ -1,14 +1,15 @@
 package eventDao
 
 import (
-	"wscmakebygo.com/global"
+	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/model"
 )
 
-func GetAllEvent(events *[]model.Events) error {
-	data := global.DB.Find(events)
+func GetAllEvent() (*[]model.Events, error) {
+	var events []model.Events
+	data := database.GetDatabase().Find(&events)
 	if data.Error != nil {
-		return data.Error
+		return nil, data.Error
 	}
-	return nil
+	return &events, nil
 }

@@ -1,21 +1,37 @@
 package internal
 
 import (
-	"wscmakebygo.com/global"
+	"github.com/labstack/echo/v4"
+	"wscmakebygo.com/global/route"
+	"wscmakebygo.com/internal/controller/attendeesController"
 	"wscmakebygo.com/internal/controller/eventsController"
-	"wscmakebygo.com/internal/controller/userController"
 )
 
-func hookUserRoute() {
-	global.Router.GET("/", userController.GetUser)
-}
-
-func hookEvensRoute() {
-	var api = global.Router.Group("/api/v1")
+func hookEventsRoute(api *echo.Group) {
 	api.GET("/events", eventsController.GetEvents)
 }
 
+func hookEventDetailRoute(api *echo.Group) {
+	api.GET("/organizers/:organizerSlug/events/:eventSlug", eventsController.GetEventDetail)
+}
+
+func hookEventReg(api *echo.Group) {
+	api.POST("/organizers/:organizerSlug/events/:eventSlug/registration", eventsController.EventReg)
+}
+
+func hookLoginRoute(api *echo.Group) {
+	api.POST("/login", attendeesController.AttendeesLogin)
+}
+
+func hookLogoutRoute(api *echo.Group) {
+	api.POST("/logout", attendeesController.AttendeesLogout)
+}
+
 func HookRoute() {
-	hookUserRoute()
-	hookEvensRoute()
+	var api = route.GetRoute().Group("/api/v1")
+	hookEventsRoute(api)
+	hookEventDetailRoute(api)
+	hookLoginRoute(api)
+	hookLogoutRoute(api)
+	hookEventReg(api)
 }
