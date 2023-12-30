@@ -16,7 +16,7 @@ func hookEventDetailRoute(api *echo.Group) {
 }
 
 func hookEventReg(api *echo.Group) {
-	api.POST("/organizers/:organizerSlug/events/:eventSlug", eventsController.EventReg)
+	api.POST("/organizers/:organizerSlug/events/:eventSlug/registration", eventsController.EventReg)
 }
 
 func hookLoginRoute(api *echo.Group) {

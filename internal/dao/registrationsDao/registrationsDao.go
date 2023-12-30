@@ -1,6 +1,7 @@
 package registrationsDao
 
 import (
+	"gorm.io/gorm"
 	"time"
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/apperrors/registrationsError"
@@ -22,7 +23,7 @@ func CountTicketReg(id int64) int64 {
 	return count
 }
 
-func AddRegistration(attendeesId int64, ticketId int64) (int64, error) {
+func AddRegistration(tx *gorm.DB, attendeesId int64, ticketId int64) (int64, error) {
 	var regs model.Registrations
 
 	count, err := findRegByAttIdAndTicketId(attendeesId, ticketId)
@@ -38,7 +39,7 @@ func AddRegistration(attendeesId int64, ticketId int64) (int64, error) {
 		RegistrationTime: time.Now(),
 	}
 
-	data := database.GetDatabase().Create(&regs)
+	data := tx.Create(&regs)
 	if data.Error != nil {
 		tools.Log.Println(data.Error.Error())
 		return -1, data.Error

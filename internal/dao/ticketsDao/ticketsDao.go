@@ -51,6 +51,7 @@ func processEventTicket(ticket model.EventTickets) api.EventDetailTickets {
 		err := tools.JsonUnmarshal([]byte(ticket.SpecialValidity), &item)
 		if err != nil {
 			tools.Log.Println(err.Error())
+			res.Available = false
 			return *res
 		}
 	} else {

@@ -6,8 +6,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"wscmakebygo.com/api"
+	"wscmakebygo.com/internal/apperrors/attendeesError"
 	"wscmakebygo.com/internal/apperrors/eventError"
 	"wscmakebygo.com/internal/apperrors/organizerError"
+	"wscmakebygo.com/internal/apperrors/registrationsError"
+	"wscmakebygo.com/internal/apperrors/ticketsError"
 	"wscmakebygo.com/internal/params/eventParams"
 	"wscmakebygo.com/internal/service/eventService"
 	"wscmakebygo.com/tools"
@@ -54,8 +57,8 @@ func GetEventDetail(c echo.Context) error {
 
 func EventReg(c echo.Context) error {
 	param := api.EventRegRequestParams{
-		OrgSlug: c.Param("organizer_slug"),
-		EvSlug:  c.Param("event_slug"),
+		OrgSlug: c.Param("organizerSlug"),
+		EvSlug:  c.Param("eventSlug"),
 		Token:   c.QueryParam("token"),
 	}
 	body := new(api.EventRegRequestBody)
@@ -87,8 +90,11 @@ func handleEventError(err error) error {
 	tools.Log.Println(err.Error())
 	switch {
 	case errors.Is(err, &eventError.EventSlugNotFoundError{}),
-		errors.Is(err, &organizerError.OrganizerSlugNotFoundError{}):
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		errors.Is(err, &organizerError.OrganizerSlugNotFoundError{}),
+		errors.Is(err, &attendeesError.NotLogin{}),
+		errors.Is(err, &ticketsError.NotAvailable{}),
+		errors.Is(err, &registrationsError.AlreadyRegistrar{}):
+		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
 	return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 }
