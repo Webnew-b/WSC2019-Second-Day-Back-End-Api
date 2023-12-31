@@ -45,6 +45,11 @@ func RegEvent(param *api.EventRegParams) (*api.EventRegRes, error) {
 		return nil, err
 	}
 
+	err = sessionIsExist(param.SessionIds, event.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	err = addReg(param, attendId)
 	if err != nil {
 		return nil, err
@@ -57,6 +62,20 @@ func buildSuccessMsg() *api.EventRegRes {
 	res := new(api.EventRegRes)
 	res.Message = success
 	return res
+}
+
+func sessionIsExist(sessionIds []int64, eventId int64) error {
+	for _, id := range sessionIds {
+		err := sessionsDao.SessionValid(id)
+		if err != nil {
+			return err
+		}
+		err = sessionsDao.IsSessionLinkedToEvent(id, eventId)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func addReg(param *api.EventRegParams, attendeeId int64) error {
@@ -95,11 +114,7 @@ func addReg(param *api.EventRegParams, attendeeId int64) error {
 func regSessions(sessions []int64, sessionParam *sessionParams.SessionsRegCreate) error {
 	for _, sessionId := range sessions {
 		sessionParam.SessionId = sessionId
-		err := sessionsDao.SessionValid(sessionId)
-		if err != nil {
-			return err
-		}
-		err = sessionsRegDao.AddSessionsReg(sessionParam)
+		err := sessionsRegDao.AddSessionsReg(sessionParam)
 		if err != nil {
 			return err
 		}

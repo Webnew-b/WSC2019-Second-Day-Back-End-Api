@@ -22,6 +22,28 @@ func FetchSessionsByRoomId(id int64) (*[]api.EventDetailSessions, error) {
 	return &rooms, nil
 }
 
+func IsSessionLinkedToEvent(sessionId int64, eventId int64) error {
+	var count int64
+
+	sessions := model.Sessions{}
+	data := database.GetDatabase().
+		Table(sessions.TableName()).
+		Joins("join rooms on rooms.id = sessions.room_id").
+		Joins("join channels on channels.id = rooms.channel_id").
+		Joins("join events on events.id = channels.event_id").
+		Where("events.id = ? AND sessions.id = ?", eventId, sessionId).
+		Count(&count)
+	if data.Error != nil {
+		tools.Log.Println(data.Error.Error())
+		return throwError()
+	}
+	if count > 0 {
+		return nil
+	}
+	tools.Log.Println(fmt.Sprintf("sessionId:%d is not event(id:%d) session", sessionId, eventId))
+	return throwError()
+}
+
 func SessionValid(id int64) error {
 	var session model.Sessions
 	data := database.GetDatabase().First(&session, id)
