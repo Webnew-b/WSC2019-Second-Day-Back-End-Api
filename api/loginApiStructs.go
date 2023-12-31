@@ -13,11 +13,3 @@ type LoginRes struct {
 	Email     string `json:"email"`
 	Token     string `json:"token" gorm:"-"`
 }
-
-type LogoutRequest struct {
-	Token string `validate:"required"`
-}
-
-type LogoutRes struct {
-	Message string `json:"message"`
-}
