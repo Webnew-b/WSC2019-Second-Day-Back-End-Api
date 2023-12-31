@@ -22,6 +22,18 @@ func GetOrganizerInfoById(id int64) (*api.ApiOrganizer, error) {
 	return &organizer, nil
 }
 
+func GetRegOrganizerInfoById(id int64) (*api.RegOrganizer, error) {
+	var organizer api.RegOrganizer
+	data := database.GetDatabase().
+		Model(&model.Organizers{}).
+		Find(&organizer, id)
+
+	if data.Error != nil {
+		return nil, data.Error
+	}
+	return &organizer, nil
+}
+
 func GetOrganizerIdBySlug(slug string) (int64, error) {
 	var organizer api.ApiOrganizer
 	data := database.GetDatabase().

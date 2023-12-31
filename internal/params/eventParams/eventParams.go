@@ -9,3 +9,8 @@ type EventFetchDao struct {
 	*EventFetchRequest
 	OrgId int64
 }
+
+type FetchEventRegParam struct {
+	RegId    int64
+	TicketId int64
+}

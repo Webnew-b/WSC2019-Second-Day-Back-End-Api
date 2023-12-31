@@ -25,6 +25,15 @@ func GetEventDetail(param eventParams.EventFetchDao) (*api.EventDetailData, erro
 	return &event, nil
 }
 
+func FetchEventDetailByIds(ids []int64) (*[]api.RegEvent, error) {
+	var event []api.RegEvent
+	data := database.GetDatabase().Model(&model.Events{}).Where("id IN ?", ids).Find(&event)
+	if data.Error != nil {
+		return nil, checkedError(data.Error, "")
+	}
+	return &event, nil
+}
+
 func checkedError(err error, msg string) error {
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):

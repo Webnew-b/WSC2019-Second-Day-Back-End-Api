@@ -44,6 +44,23 @@ func IsSessionLinkedToEvent(sessionId int64, eventId int64) error {
 	return throwError()
 }
 
+func GetSessionIdsByEventIdAndAttendeeId(eventId int64, attendeeId int64) ([]int64, error) {
+	sessions := model.SessionRegistrations{}
+	var res []int64
+	data := database.GetDatabase().
+		Table(sessions.TableName()).
+		Joins("join registrations on registrations.id = session_registrations.registration_id").
+		Joins("join event_tickets on event_tickets.id = registrations.ticket_id").
+		Joins("join events on events.id = event_tickets.event_id").
+		Where("events.id = ? AND registrations.attendee_id = ?", eventId, attendeeId).
+		Select("session_id").
+		Find(&res)
+	if data.Error != nil {
+		return res, data.Error
+	}
+	return res, nil
+}
+
 func SessionValid(id int64) error {
 	var session model.Sessions
 	data := database.GetDatabase().First(&session, id)

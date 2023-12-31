@@ -34,6 +34,19 @@ func FetchTicketByEventId(id int64) (*[]api.EventDetailTickets, error) {
 	return res, nil
 }
 
+func FetchEventIdByTicketId(ticketId int64) (int64, error) {
+	var eventId int64
+	data := database.
+		GetDatabase().
+		Model(&model.EventTickets{}).
+		Select("event_id").
+		First(&eventId, ticketId)
+	if data.Error != nil {
+		return -1, data.Error
+	}
+	return eventId, nil
+}
+
 func buildEventDetailTickets(tickets *[]model.EventTickets) *[]api.EventDetailTickets {
 	list := make([]api.EventDetailTickets, len(*tickets))
 
