@@ -2,12 +2,16 @@ package attendeesDao
 
 import (
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
+	"strconv"
 	"wscmakebygo.com/api"
+	"wscmakebygo.com/global/constant"
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/apperrors/attendeesError"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/redisUtil"
 )
 
 func FetchAttendeesByCode(params api.LoginRequest) (*api.LoginRes, error) {
@@ -25,6 +29,20 @@ func FetchAttendeesByCode(params api.LoginRequest) (*api.LoginRes, error) {
 		return nil, err
 	}
 	return &attendees, nil
+}
+
+func FetchAttendeeIdByCache(token string) (int64, error) {
+	key := fmt.Sprintf("%s%s", constant.ATTENDEE_LOGIN_PREFIX, token)
+	data, err := redisUtil.GetData(key)
+	if err != nil {
+		return 0, &attendeesError.NotLogin{}
+	}
+	id, err := strconv.ParseInt(data, 10, 64)
+	if err != nil {
+		tools.Log.Println(err.Error())
+		return 0, err
+	}
+	return id, nil
 }
 
 func checkedError(err error, msg string) error {

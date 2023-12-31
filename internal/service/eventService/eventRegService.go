@@ -1,20 +1,15 @@
 package eventService
 
 import (
-	"fmt"
-	"strconv"
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global/constant"
 	"wscmakebygo.com/global/database"
-	"wscmakebygo.com/internal/apperrors/attendeesError"
+	"wscmakebygo.com/internal/dao/attendeesDao"
 	"wscmakebygo.com/internal/dao/registrationsDao"
 	"wscmakebygo.com/internal/dao/sessionsDao"
 	"wscmakebygo.com/internal/dao/sessionsRegDao"
 	"wscmakebygo.com/internal/dao/ticketsDao"
 	"wscmakebygo.com/internal/params/eventParams"
 	"wscmakebygo.com/internal/params/sessionParams"
-	"wscmakebygo.com/tools"
-	"wscmakebygo.com/tools/redisUtil"
 )
 
 const (
@@ -35,7 +30,7 @@ func RegEvent(param *api.EventRegParams) (*api.EventRegRes, error) {
 		return nil, err
 	}
 
-	attendId, err = fetchAttendeeId(param.Token)
+	attendId, err = attendeesDao.FetchAttendeeIdByCache(param.Token)
 	if err != nil {
 		return nil, err
 	}
@@ -120,18 +115,4 @@ func regSessions(sessions []int64, sessionParam *sessionParams.SessionsRegCreate
 		}
 	}
 	return nil
-}
-
-func fetchAttendeeId(token string) (int64, error) {
-	key := fmt.Sprintf("%s%s", constant.ATTENDEE_LOGIN_PREFIX, token)
-	data, err := redisUtil.GetData(key)
-	if err != nil {
-		return 0, &attendeesError.NotLogin{}
-	}
-	id, err := strconv.ParseInt(data, 10, 64)
-	if err != nil {
-		tools.Log.Println(err.Error())
-		return 0, err
-	}
-	return id, nil
 }
