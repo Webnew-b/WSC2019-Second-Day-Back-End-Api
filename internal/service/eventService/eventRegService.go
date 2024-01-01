@@ -3,7 +3,6 @@ package eventService
 import (
 	"wscmakebygo.com/api"
 	"wscmakebygo.com/global/database"
-	"wscmakebygo.com/internal/dao/attendeesDao"
 	"wscmakebygo.com/internal/dao/registrationsDao"
 	"wscmakebygo.com/internal/dao/sessionsDao"
 	"wscmakebygo.com/internal/dao/sessionsRegDao"
@@ -18,19 +17,13 @@ const (
 
 func RegEvent(param *api.EventRegParams) (*api.EventRegRes, error) {
 	var (
-		event    *api.EventDetailData
-		attendId int64
-		err      error
+		event *api.EventDetailData
+		err   error
 	)
 	event, err = fetchEvent(&eventParams.EventFetchRequest{
 		OrgSlug: param.OrgSlug,
 		EvSlug:  param.EvSlug,
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	attendId, err = attendeesDao.FetchAttendeeIdByCache(param.Token)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +38,7 @@ func RegEvent(param *api.EventRegParams) (*api.EventRegRes, error) {
 		return nil, err
 	}
 
-	err = addReg(param, attendId)
+	err = addReg(param)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +66,7 @@ func sessionIsExist(sessionIds []int64, eventId int64) error {
 	return nil
 }
 
-func addReg(param *api.EventRegParams, attendeeId int64) error {
+func addReg(param *api.EventRegParams) error {
 	var (
 		sessionParam *sessionParams.SessionsRegCreate
 		regId        int64
@@ -87,7 +80,7 @@ func addReg(param *api.EventRegParams, attendeeId int64) error {
 		}
 	}()
 
-	regId, err = registrationsDao.AddRegistration(tx, attendeeId, param.TicketID)
+	regId, err = registrationsDao.AddRegistration(tx, param.AttendeeId, param.TicketID)
 	if err != nil {
 		tx.Rollback()
 		return err

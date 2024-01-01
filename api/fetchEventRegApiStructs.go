@@ -1,7 +1,7 @@
 package api
 
 type FetchEventRegReq struct {
-	Token string `validate:"required"`
+	Id int64 `validate:"required"`
 }
 
 type FetchEventRegRes struct {

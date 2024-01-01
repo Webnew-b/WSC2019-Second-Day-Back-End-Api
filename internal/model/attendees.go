@@ -1,5 +1,10 @@
 package model
 
+import (
+	"github.com/labstack/echo/v4"
+	"net/http"
+)
+
 type Attendees struct {
 	ID               int64  `json:"id" gorm:"id"`
 	Firstname        string `json:"firstname" gorm:"firstname"`
@@ -13,4 +18,12 @@ type Attendees struct {
 // TableName 表名称
 func (*Attendees) TableName() string {
 	return "attendees"
+}
+
+func (*Attendees) CheckAttendeeType(value interface{}) (Attendees, error) {
+	attendee, ok := value.(Attendees)
+	if !ok {
+		return Attendees{}, echo.NewHTTPError(http.StatusBadRequest, "Invalid attendee type")
+	}
+	return attendee, nil
 }

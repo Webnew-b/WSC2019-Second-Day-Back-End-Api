@@ -2,14 +2,12 @@ package eventService
 
 import (
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/internal/dao/attendeesDao"
 	"wscmakebygo.com/internal/dao/eventDao"
 	"wscmakebygo.com/internal/dao/organizerDao"
 	"wscmakebygo.com/internal/dao/registrationsDao"
 	"wscmakebygo.com/internal/dao/sessionsDao"
 	"wscmakebygo.com/internal/dao/ticketsDao"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools/logUtil"
 	"wscmakebygo.com/tools/uniqueUtil"
 )
 
@@ -19,46 +17,34 @@ func FetchEventRegDetail(param *api.FetchEventRegReq) (*api.FetchEventRegRes, er
 		regEvent  *[]api.RegEvent
 		regs      *[]model.Registrations
 		resReg    *[]api.Registrations
-		attendId  int64
 		ticketIds []int64
 		eventIds  *[]int64
 		err       error
 	)
 
-	logUtil.Log.Println(1)
-	attendId, err = attendeesDao.FetchAttendeeIdByCache(param.Token)
-	if err != nil {
-		return nil, err
-	}
-
-	logUtil.Log.Println(2)
-	regs, err = registrationsDao.FetchRegsByAttendeeId(attendId)
+	regs, err = registrationsDao.FetchRegsByAttendeeId(param.Id)
 	if err != nil {
 		return nil, err
 	}
 
 	ticketIds = fetchTicketId(*regs)
 
-	logUtil.Log.Println(3)
 	eventIds, err = fetchEventId(ticketIds)
 	if err != nil {
 		return nil, err
 	}
 
-	logUtil.Log.Println(4)
 	event, err = eventDao.FetchEventDetailByIds(*eventIds)
 	if err != nil {
 		return nil, err
 	}
 
-	logUtil.Log.Println(5)
 	regEvent, err = buildRegEvent(*event)
 	if err != nil {
 		return nil, err
 	}
 
-	logUtil.Log.Println(6)
-	resReg, err = buildReg(*regEvent, attendId)
+	resReg, err = buildReg(*regEvent, param.Id)
 
 	return &api.FetchEventRegRes{Registrations: *resReg}, nil
 }

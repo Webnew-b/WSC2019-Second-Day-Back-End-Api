@@ -5,6 +5,7 @@ import (
 	"wscmakebygo.com/global/route"
 	"wscmakebygo.com/internal/controller/attendeesController"
 	"wscmakebygo.com/internal/controller/eventsController"
+	"wscmakebygo.com/internal/middleware"
 )
 
 func hookEventsRoute(api *echo.Group) {
@@ -16,11 +17,13 @@ func hookEventDetailRoute(api *echo.Group) {
 }
 
 func hookFetchEventReg(api *echo.Group) {
-	api.GET("/registrations", eventsController.FetchEventReg)
+	api.GET("/registrations",
+		middleware.WithMiddleware(eventsController.FetchEventReg, middleware.UserAuthMiddleware))
 }
 
 func hookEventReg(api *echo.Group) {
-	api.POST("/organizers/:organizerSlug/events/:eventSlug/registration", eventsController.EventReg)
+	api.POST("/organizers/:organizerSlug/events/:eventSlug/registration",
+		middleware.WithMiddleware(eventsController.EventReg, middleware.UserAuthMiddleware))
 }
 
 func hookLoginRoute(api *echo.Group) {
