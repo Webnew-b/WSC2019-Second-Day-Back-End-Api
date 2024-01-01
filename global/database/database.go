@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"sync"
 	"wscmakebygo.com/global/envConfig"
 	"wscmakebygo.com/tools/logUtil"
@@ -51,10 +52,13 @@ func InitVal() {
 		logStr := fmt.Sprintf("%s:%d", envConfig.GetConfig().Db.Host, envConfig.GetConfig().Db.Port)
 		addr := crateDbAddr()
 		init, err := gorm.Open(mysql.Open(addr), &gorm.Config{})
-		logUtil.Log.Println("created Db connection:" + logStr)
 		if err != nil {
 			panic(err)
 		}
+		logUtil.Log.Println("created Db connection:" + logStr)
+		init.Logger = NewLogger(
+			logUtil.DBLog,
+			logger.Info)
 		db = init
 	})
 }

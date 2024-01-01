@@ -6,6 +6,7 @@ import (
 	"log"
 	"sync"
 	"wscmakebygo.com/global/envConfig"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var (
@@ -28,6 +29,7 @@ func InitVal() {
 	once.Do(func() {
 		log.Println("starting http Server")
 		router = echo.New()
+		router.Logger.SetOutput(logUtil.GetEchoLogFile())
 	})
 }
 
