@@ -3,6 +3,7 @@ package eventsController
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"wscmakebygo.com/internal/apperrors"
 	"wscmakebygo.com/internal/apperrors/eventError"
 	"wscmakebygo.com/internal/params/eventParams"
 	"wscmakebygo.com/internal/service/eventService"
@@ -13,7 +14,7 @@ func GetEventDetail(c echo.Context) error {
 		OrgSlug: c.Param("organizerSlug"),
 		EvSlug:  c.Param("eventSlug"),
 	}
-	err := validate(eventFetchRequest, eventError.EVENT_NOT_FOUND)
+	err := apperrors.ValidateStruct(eventFetchRequest, eventError.EVENT_NOT_FOUND)
 	if err != nil {
 		return handleEventError(err)
 	}

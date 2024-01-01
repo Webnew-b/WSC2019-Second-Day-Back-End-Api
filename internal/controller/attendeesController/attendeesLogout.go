@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"wscmakebygo.com/api"
+	"wscmakebygo.com/internal/apperrors"
 	"wscmakebygo.com/internal/apperrors/attendeesError"
 	"wscmakebygo.com/internal/service/attendeesService"
 )
@@ -13,7 +14,7 @@ func AttendeesLogout(c echo.Context) error {
 		Token: c.QueryParam("token"),
 	}
 
-	if err := validate(req, attendeesError.ErrInvalidTokenMessage); err != nil {
+	if err := apperrors.ValidateStruct(req, attendeesError.ErrInvalidTokenMessage); err != nil {
 		return err
 	}
 

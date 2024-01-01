@@ -31,6 +31,16 @@ func FetchAttendeesByCode(params api.LoginRequest) (*api.LoginRes, error) {
 	return &attendees, nil
 }
 
+func FetchAttendeeById(id int64) (model.Attendees, error) {
+	var attendees model.Attendees
+	data := database.GetDatabase().First(&attendees, id)
+	err := checkedError(data.Error, id)
+	if err != nil {
+		return model.Attendees{}, err
+	}
+	return attendees, err
+}
+
 func FetchAttendeeIdByCache(token string) (int64, error) {
 	key := fmt.Sprintf("%s%s", constant.ATTENDEE_LOGIN_PREFIX, token)
 	data, err := redisUtil.GetData(key)
@@ -45,7 +55,7 @@ func FetchAttendeeIdByCache(token string) (int64, error) {
 	return id, nil
 }
 
-func checkedError(err error, msg string) error {
+func checkedError(err error, msg any) error {
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
 		logUtil.Log.Println(msg, "Attendees is not found")
