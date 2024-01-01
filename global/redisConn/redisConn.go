@@ -6,7 +6,7 @@ import (
 	"sync"
 	"wscmakebygo.com/config"
 	"wscmakebygo.com/global/envConfig"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var (
@@ -30,15 +30,15 @@ func crateRedisAddr() string {
 func InitVal() {
 	redisConfig = envConfig.GetConfig().Redis
 	once.Do(func() {
-		tools.Log.Println("Connecting Redis")
+		logUtil.Log.Println("Connecting Redis")
 		logStr := crateRedisAddr()
 		init := redis.NewClient(&redis.Options{
 			Addr:     logStr,
 			Password: redisConfig.Password, // no password set
 			DB:       redisConfig.DB,       // use default DB
 		})
-		tools.Log.Println("created Redis connection:" + logStr)
+		logUtil.Log.Println("created Redis connection:" + logStr)
 		rdb = init
-		tools.Log.Println("Connect Redis success")
+		logUtil.Log.Println("Connect Redis success")
 	})
 }

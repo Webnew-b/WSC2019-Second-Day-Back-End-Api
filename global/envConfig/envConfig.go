@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"wscmakebygo.com/config"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var (
@@ -28,7 +28,7 @@ func unmarshalConfigYaml(yamlFile []byte) *config.Config {
 }
 
 func InitVal() {
-	tools.Log.Println("get Config")
+	logUtil.Log.Println("get Config")
 	yamlFile := config.ReadYamlFile()
 	_config := unmarshalConfigYaml(yamlFile)
 	// todo 判断对应需要配置的配置值是否为空

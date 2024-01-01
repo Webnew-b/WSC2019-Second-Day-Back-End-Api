@@ -1,4 +1,4 @@
-package tools
+package dateUtil
 
 import "time"
 

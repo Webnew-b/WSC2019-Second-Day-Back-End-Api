@@ -12,7 +12,8 @@ import (
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/start"
 	"wscmakebygo.com/test"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/jsonUtil"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var (
@@ -29,11 +30,11 @@ func TestDb(t *testing.T) {
 		tools.Log.Fatal(data.Error.Error())
 	}
 	tools.Log.Println(ticket.Cost)*/
-	str, err := tools.JsonMarshal(ticket)
+	str, err := jsonUtil.JsonMarshal(ticket)
 	if err != nil {
 		log.Fatal(err)
 	}
-	tools.Log.Println(string(str))
+	logUtil.Log.Println(string(str))
 }
 
 func TestGetDirPath(t *testing.T) {
@@ -45,10 +46,10 @@ func TestGetDirPath(t *testing.T) {
 		log.Fatalf("Error: Record not found for user with ID %d", 6)
 	}
 	if data.Error != nil {
-		tools.Log.Println("123456")
-		tools.Log.Fatal(data.Error, "123456")
+		logUtil.Log.Println("123456")
+		logUtil.Log.Fatal(data.Error, "123456")
 	}
-	str, err := tools.JsonMarshal(event)
+	str, err := jsonUtil.JsonMarshal(event)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,16 +61,16 @@ func TestFetchA(t *testing.T) {
 	start.StartDbConnect()
 	id, err := sessionsDao.GetSessionIdsByEventIdAndAttendeeId(1, 2)
 	if err != nil {
-		tools.Log.Println(err.Error())
+		logUtil.Log.Println(err.Error())
 		return
 	}
-	tools.Log.Println(id)
-	str, err := tools.JsonMarshal(id)
+	logUtil.Log.Println(id)
+	str, err := jsonUtil.JsonMarshal(id)
 	if err != nil {
-		tools.Log.Println(err.Error())
+		logUtil.Log.Println(err.Error())
 		return
 	}
-	tools.Log.Println(string(str))
+	logUtil.Log.Println(string(str))
 }
 
 func TestFetchB(t *testing.T) {
@@ -77,10 +78,10 @@ func TestFetchB(t *testing.T) {
 	start.StartDbConnect()
 	id, err := ticketsDao.FetchEventIdByTicketId(2)
 	if err != nil {
-		tools.Log.Println(err.Error())
+		logUtil.Log.Println(err.Error())
 		return
 	}
-	tools.Log.Println(id)
+	logUtil.Log.Println(id)
 }
 
 func TestLogPrint(t *testing.T) {

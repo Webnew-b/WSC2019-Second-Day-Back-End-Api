@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"wscmakebygo.com/internal/apperrors/attendeesError"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var valid = validator.New()
@@ -20,7 +20,7 @@ func validate(i interface{}, errMsg string) error {
 }
 
 func handleAttendeesError(err error) error {
-	tools.Log.Println(err.Error())
+	logUtil.Log.Println(err.Error())
 	switch {
 
 	case errors.Is(err, &attendeesError.NotFound{}):

@@ -3,7 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 type Config struct {
@@ -44,7 +44,7 @@ type Redis struct {
 }
 
 func ReadYamlFile() []byte {
-	workingPath, err := tools.GetWorkingDir()
+	workingPath, err := logUtil.GetWorkingDir()
 	if err != nil {
 		//todo 如果文件不存在，自动生成配置文件
 		panic(err)

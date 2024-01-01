@@ -10,7 +10,7 @@ import (
 	"wscmakebygo.com/internal/apperrors/organizerError"
 	"wscmakebygo.com/internal/apperrors/registrationsError"
 	"wscmakebygo.com/internal/apperrors/ticketsError"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var valid = validator.New()
@@ -24,7 +24,7 @@ func validate(i interface{}, errMsg string) error {
 }
 
 func handleEventError(err error) error {
-	tools.Log.Println(err.Error())
+	logUtil.Log.Println(err.Error())
 	switch {
 	case errors.Is(err, &eventError.EventSlugNotFoundError{}),
 		errors.Is(err, &organizerError.OrganizerSlugNotFoundError{}),

@@ -7,7 +7,7 @@ import (
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/apperrors/ticketsError"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 func FetchSessionsByRoomId(id int64) (*[]api.EventDetailSessions, error) {
@@ -34,13 +34,13 @@ func IsSessionLinkedToEvent(sessionId int64, eventId int64) error {
 		Where("events.id = ? AND sessions.id = ?", eventId, sessionId).
 		Count(&count)
 	if data.Error != nil {
-		tools.Log.Println(data.Error.Error())
+		logUtil.Log.Println(data.Error.Error())
 		return throwError()
 	}
 	if count > 0 {
 		return nil
 	}
-	tools.Log.Println(fmt.Sprintf("sessionId:%d is not event(id:%d) session", sessionId, eventId))
+	logUtil.Log.Println(fmt.Sprintf("sessionId:%d is not event(id:%d) session", sessionId, eventId))
 	return throwError()
 }
 
@@ -65,11 +65,11 @@ func SessionValid(id int64) error {
 	var session model.Sessions
 	data := database.GetDatabase().First(&session, id)
 	if data.Error != nil {
-		tools.Log.Println(data.Error.Error(), fmt.Sprintf("sessionId:%d", id))
+		logUtil.Log.Println(data.Error.Error(), fmt.Sprintf("sessionId:%d", id))
 		return throwError()
 	}
 	if isOutTime(session.End) {
-		tools.Log.Println(fmt.Sprintf("sessionId:%d", id), "session is out Time")
+		logUtil.Log.Println(fmt.Sprintf("sessionId:%d", id), "session is out Time")
 		return throwError()
 	}
 	return nil

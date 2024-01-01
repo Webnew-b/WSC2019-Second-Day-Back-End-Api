@@ -1,4 +1,4 @@
-package tools
+package uniqueUtil
 
 func UniqueInt64Slice(slice []int64) []int64 {
 	seen := make(map[int64]bool)

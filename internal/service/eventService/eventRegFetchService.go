@@ -9,7 +9,8 @@ import (
 	"wscmakebygo.com/internal/dao/sessionsDao"
 	"wscmakebygo.com/internal/dao/ticketsDao"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
+	"wscmakebygo.com/tools/uniqueUtil"
 )
 
 func FetchEventRegDetail(param *api.FetchEventRegReq) (*api.FetchEventRegRes, error) {
@@ -24,13 +25,13 @@ func FetchEventRegDetail(param *api.FetchEventRegReq) (*api.FetchEventRegRes, er
 		err       error
 	)
 
-	tools.Log.Println(1)
+	logUtil.Log.Println(1)
 	attendId, err = attendeesDao.FetchAttendeeIdByCache(param.Token)
 	if err != nil {
 		return nil, err
 	}
 
-	tools.Log.Println(2)
+	logUtil.Log.Println(2)
 	regs, err = registrationsDao.FetchRegsByAttendeeId(attendId)
 	if err != nil {
 		return nil, err
@@ -38,25 +39,25 @@ func FetchEventRegDetail(param *api.FetchEventRegReq) (*api.FetchEventRegRes, er
 
 	ticketIds = fetchTicketId(*regs)
 
-	tools.Log.Println(3)
+	logUtil.Log.Println(3)
 	eventIds, err = fetchEventId(ticketIds)
 	if err != nil {
 		return nil, err
 	}
 
-	tools.Log.Println(4)
+	logUtil.Log.Println(4)
 	event, err = eventDao.FetchEventDetailByIds(*eventIds)
 	if err != nil {
 		return nil, err
 	}
 
-	tools.Log.Println(5)
+	logUtil.Log.Println(5)
 	regEvent, err = buildRegEvent(*event)
 	if err != nil {
 		return nil, err
 	}
 
-	tools.Log.Println(6)
+	logUtil.Log.Println(6)
 	resReg, err = buildReg(*regEvent, attendId)
 
 	return &api.FetchEventRegRes{Registrations: *resReg}, nil
@@ -71,7 +72,7 @@ func fetchTicketId(regs []model.Registrations) []int64 {
 }
 
 func fetchEventId(ticketIds []int64) (*[]int64, error) {
-	uniqueTicketIds := tools.UniqueInt64Slice(ticketIds)
+	uniqueTicketIds := uniqueUtil.UniqueInt64Slice(ticketIds)
 	var eventIds []int64
 	for _, id := range uniqueTicketIds {
 		eventId, err := ticketsDao.FetchEventIdByTicketId(id)
@@ -80,7 +81,7 @@ func fetchEventId(ticketIds []int64) (*[]int64, error) {
 		}
 		eventIds = append(eventIds, eventId)
 	}
-	uniqueEventIds := tools.UniqueInt64Slice(eventIds)
+	uniqueEventIds := uniqueUtil.UniqueInt64Slice(eventIds)
 	return &uniqueEventIds, nil
 }
 

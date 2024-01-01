@@ -10,7 +10,7 @@ import (
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/apperrors/attendeesError"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 	"wscmakebygo.com/tools/redisUtil"
 )
 
@@ -39,7 +39,7 @@ func FetchAttendeeIdByCache(token string) (int64, error) {
 	}
 	id, err := strconv.ParseInt(data, 10, 64)
 	if err != nil {
-		tools.Log.Println(err.Error())
+		logUtil.Log.Println(err.Error())
 		return 0, err
 	}
 	return id, nil
@@ -48,7 +48,7 @@ func FetchAttendeeIdByCache(token string) (int64, error) {
 func checkedError(err error, msg string) error {
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
-		tools.Log.Println(msg, "Attendees is not found")
+		logUtil.Log.Println(msg, "Attendees is not found")
 		return &attendeesError.NotFound{}
 	case err != nil:
 		return err

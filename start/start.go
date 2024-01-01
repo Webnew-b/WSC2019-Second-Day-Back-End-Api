@@ -6,18 +6,18 @@ import (
 	"wscmakebygo.com/global/redisConn"
 	"wscmakebygo.com/global/route"
 	"wscmakebygo.com/internal"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 func Init() {
-	tools.Log.Println("Server is Starting")
+	logUtil.Log.Println("Server is Starting")
 	envConfig.InitVal()
 	database.InitVal()
 	redisConn.InitVal()
 	route.InitVal()
 	internal.HookRoute()
 	route.StartRoute()
-	tools.Log.Println("Server is Started")
+	logUtil.Log.Println("Server is Started")
 }
 
 func StartDbConnect() {
@@ -26,6 +26,6 @@ func StartDbConnect() {
 }
 
 func StopServe() {
-	tools.Log.Println("stopping Server")
+	logUtil.Log.Println("stopping Server")
 	// todo 停止日志读写以及清退存在的协程
 }

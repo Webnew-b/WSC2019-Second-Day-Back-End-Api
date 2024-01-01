@@ -9,7 +9,7 @@ import (
 	"wscmakebygo.com/global/constant"
 	"wscmakebygo.com/internal/apperrors/attendeesError"
 	"wscmakebygo.com/internal/dao/attendeesDao"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 	"wscmakebygo.com/tools/redisUtil"
 )
 
@@ -56,7 +56,7 @@ func removeToken(token string) error {
 	key := fmt.Sprintf("%s%s", constant.ATTENDEE_LOGIN_PREFIX, token)
 	err := redisUtil.RemoveKey(key)
 	if err != nil {
-		tools.Log.Println(err.Error())
+		logUtil.Log.Println(err.Error())
 		return &attendeesError.LoginKeyNotExist{}
 	}
 	return nil

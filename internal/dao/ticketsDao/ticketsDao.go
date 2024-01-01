@@ -7,7 +7,9 @@ import (
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/dao/registrationsDao"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/dateUtil"
+	"wscmakebygo.com/tools/jsonUtil"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 const (
@@ -61,9 +63,9 @@ func processEventTicket(ticket model.EventTickets) api.EventDetailTickets {
 	res := newEventDetailTicket(ticket)
 
 	if ticket.SpecialValidity != "" {
-		err := tools.JsonUnmarshal([]byte(ticket.SpecialValidity), &item)
+		err := jsonUtil.JsonUnmarshal([]byte(ticket.SpecialValidity), &item)
 		if err != nil {
-			tools.Log.Println(err.Error())
+			logUtil.Log.Println(err.Error())
 			res.Available = false
 			return *res
 		}
@@ -82,12 +84,12 @@ func processEventTicket(ticket model.EventTickets) api.EventDetailTickets {
 func getDescription(item specialValidity, ticketId int64) string {
 	switch item.Type {
 	case typeDate:
-		date, err := tools.ParseTicketDate(item.TicketDate)
+		date, err := dateUtil.ParseTicketDate(item.TicketDate)
 		if err != nil {
-			tools.Log.Println(err.Error())
+			logUtil.Log.Println(err.Error())
 			return fmt.Sprintf("Available until %s", item.TicketDate)
 		}
-		return fmt.Sprintf("Available until %s", tools.FormatTicketDate(date))
+		return fmt.Sprintf("Available until %s", dateUtil.FormatTicketDate(date))
 	case typeAmount:
 		amount := registrationsDao.CountTicketReg(ticketId)
 		if amount >= item.Amount {
@@ -102,9 +104,9 @@ func getDescription(item specialValidity, ticketId int64) string {
 func getAvailable(item specialValidity, ticketId int64) bool {
 	switch item.Type {
 	case typeDate:
-		date, err := tools.ParseTicketDate(item.TicketDate)
+		date, err := dateUtil.ParseTicketDate(item.TicketDate)
 		if err != nil {
-			tools.Log.Println(err.Error())
+			logUtil.Log.Println(err.Error())
 			return false
 		}
 		now := time.Now()
