@@ -1,11 +1,13 @@
 package route
 
 import (
+	"context"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
 	"sync"
 	"wscmakebygo.com/global/envConfig"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 var (
@@ -20,6 +22,12 @@ func GetRoute() *echo.Echo {
 	return router
 }
 
+func StopEcho(ctx context.Context) {
+	if err := router.Shutdown(ctx); err != nil {
+		router.Logger.Fatal(err)
+	}
+}
+
 func StartRoute() {
 	router.Logger.Fatal(router.Start(createServerAddr()))
 }
@@ -28,6 +36,7 @@ func InitVal() {
 	once.Do(func() {
 		log.Println("starting http Server")
 		router = echo.New()
+		router.Logger.SetOutput(logUtil.GetEchoLogFile())
 	})
 }
 

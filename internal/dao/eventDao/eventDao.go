@@ -13,3 +13,12 @@ func GetAllEvent() (*[]model.Events, error) {
 	}
 	return &events, nil
 }
+
+func FetchTicketEvent() (*[]model.Events, error) {
+	var events []model.Events
+	data := database.GetDatabase().Find(&events)
+	if data.Error != nil {
+		return nil, data.Error
+	}
+	return &events, nil
+}

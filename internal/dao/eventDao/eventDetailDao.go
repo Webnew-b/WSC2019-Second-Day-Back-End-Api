@@ -8,7 +8,7 @@ import (
 	"wscmakebygo.com/internal/apperrors/eventError"
 	"wscmakebygo.com/internal/model"
 	"wscmakebygo.com/internal/params/eventParams"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 func GetEventDetail(param eventParams.EventFetchDao) (*api.EventDetailData, error) {
@@ -25,10 +25,19 @@ func GetEventDetail(param eventParams.EventFetchDao) (*api.EventDetailData, erro
 	return &event, nil
 }
 
+func FetchEventDetailByIds(ids []int64) (*[]api.RegEvent, error) {
+	var event []api.RegEvent
+	data := database.GetDatabase().Model(&model.Events{}).Where("id IN ?", ids).Find(&event)
+	if data.Error != nil {
+		return nil, checkedError(data.Error, "")
+	}
+	return &event, nil
+}
+
 func checkedError(err error, msg string) error {
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
-		tools.Log.Println(msg, "event is not found")
+		logUtil.Log.Println(msg, "event is not found")
 		return &eventError.EventSlugNotFoundError{}
 	case err != nil:
 		return err

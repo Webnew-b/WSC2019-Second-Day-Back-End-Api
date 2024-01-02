@@ -1,10 +1,10 @@
 package envConfig
 
 import (
-	"fmt"
+	"github.com/go-playground/validator/v10"
 	"gopkg.in/yaml.v3"
+	"log"
 	"wscmakebygo.com/config"
-	"wscmakebygo.com/tools"
 )
 
 var (
@@ -22,15 +22,28 @@ func unmarshalConfigYaml(yamlFile []byte) *config.Config {
 	var _config *config.Config
 	err := yaml.Unmarshal(yamlFile, &_config)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
+		panic("yaml file can't unmarshal")
 	}
 	return _config
 }
 
+func validateStruct(i interface{}) error {
+	var valid = validator.New()
+	err := valid.Struct(i)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func InitVal() {
-	tools.Log.Println("get Config")
+	log.Println("get Config")
 	yamlFile := config.ReadYamlFile()
 	_config := unmarshalConfigYaml(yamlFile)
-	// todo 判断对应需要配置的配置值是否为空
+	err := validateStruct(_config)
+	if err != nil {
+		panic(err.Error())
+	}
 	Config = _config
 }

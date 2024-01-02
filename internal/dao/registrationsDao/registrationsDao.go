@@ -6,7 +6,7 @@ import (
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/apperrors/registrationsError"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 func CountTicketReg(id int64) int64 {
@@ -17,7 +17,7 @@ func CountTicketReg(id int64) int64 {
 		Where(&model.Registrations{TicketId: id}, "ticket_id").
 		Count(&count)
 	if data.Error != nil {
-		tools.Log.Println(data.Error.Error())
+		logUtil.Log.Println(data.Error.Error())
 		return 0
 	}
 	return count
@@ -41,7 +41,7 @@ func AddRegistration(tx *gorm.DB, attendeesId int64, ticketId int64) (int64, err
 
 	data := tx.Create(&regs)
 	if data.Error != nil {
-		tools.Log.Println(data.Error.Error())
+		logUtil.Log.Println(data.Error.Error())
 		return -1, data.Error
 	}
 
@@ -61,7 +61,7 @@ func findRegByAttIdAndTicketId(attendeesId int64, ticketId int64) (int64, error)
 		Count(&count)
 
 	if data.Error != nil {
-		tools.Log.Println(data.Error.Error())
+		logUtil.Log.Println(data.Error.Error())
 		return 0, data.Error
 	}
 	return count, nil

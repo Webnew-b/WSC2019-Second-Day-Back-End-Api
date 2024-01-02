@@ -1,7 +1,8 @@
-package eventsController
+package apperrors
 
 import (
 	"errors"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"wscmakebygo.com/internal/apperrors/attendeesError"
@@ -12,7 +13,17 @@ import (
 	"wscmakebygo.com/tools/logUtil"
 )
 
-func handleEventError(err error) error {
+var valid = validator.New()
+
+func ValidateStruct(i interface{}, errMsg string) error {
+	err := valid.Struct(i)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, errMsg)
+	}
+	return nil
+}
+
+func HandleError(err error) error {
 	logUtil.Log.Println(err.Error())
 	switch {
 	case errors.Is(err, &eventError.EventSlugNotFoundError{}),

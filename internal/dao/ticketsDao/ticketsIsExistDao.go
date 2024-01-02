@@ -3,7 +3,7 @@ package ticketsDao
 import (
 	"wscmakebygo.com/global/database"
 	"wscmakebygo.com/internal/model"
-	"wscmakebygo.com/tools"
+	"wscmakebygo.com/tools/logUtil"
 )
 
 func TicketsIsExist(id int64, eventId int64) error {
@@ -13,11 +13,11 @@ func TicketsIsExist(id int64, eventId int64) error {
 		Where(&model.EventTickets{
 			ID:      id,
 			EventId: eventId,
-		}).
+		}, "id", "event_id").
 		First(&ticket)
 
 	if data.Error != nil {
-		tools.Log.Println(data.Error.Error())
+		logUtil.Log.Println(data.Error.Error())
 		return throwError()
 	}
 

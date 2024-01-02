@@ -3,7 +3,6 @@ package api
 type EventRegRequestParams struct {
 	OrgSlug string `validate:"required"`
 	EvSlug  string `validate:"required"`
-	Token   string `validate:"required"`
 }
 
 type EventRegRequestBody struct {
@@ -12,6 +11,7 @@ type EventRegRequestBody struct {
 }
 
 type EventRegParams struct {
+	AttendeeId int64 `validate:"required"`
 	*EventRegRequestParams
 	*EventRegRequestBody
 }

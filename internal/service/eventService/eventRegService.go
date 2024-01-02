@@ -1,20 +1,14 @@
 package eventService
 
 import (
-	"fmt"
-	"strconv"
 	"wscmakebygo.com/api"
-	"wscmakebygo.com/global/constant"
 	"wscmakebygo.com/global/database"
-	"wscmakebygo.com/internal/apperrors/attendeesError"
 	"wscmakebygo.com/internal/dao/registrationsDao"
 	"wscmakebygo.com/internal/dao/sessionsDao"
 	"wscmakebygo.com/internal/dao/sessionsRegDao"
 	"wscmakebygo.com/internal/dao/ticketsDao"
 	"wscmakebygo.com/internal/params/eventParams"
 	"wscmakebygo.com/internal/params/sessionParams"
-	"wscmakebygo.com/tools"
-	"wscmakebygo.com/tools/redisUtil"
 )
 
 const (
@@ -23,9 +17,8 @@ const (
 
 func RegEvent(param *api.EventRegParams) (*api.EventRegRes, error) {
 	var (
-		event    *api.EventDetailData
-		attendId int64
-		err      error
+		event *api.EventDetailData
+		err   error
 	)
 	event, err = fetchEvent(&eventParams.EventFetchRequest{
 		OrgSlug: param.OrgSlug,
@@ -35,17 +28,17 @@ func RegEvent(param *api.EventRegParams) (*api.EventRegRes, error) {
 		return nil, err
 	}
 
-	attendId, err = fetchAttendeeId(param.Token)
-	if err != nil {
-		return nil, err
-	}
-
 	err = ticketsDao.TicketsIsExist(param.TicketID, event.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = addReg(param, attendId)
+	err = sessionIsExist(param.SessionIds, event.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = addReg(param)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +52,21 @@ func buildSuccessMsg() *api.EventRegRes {
 	return res
 }
 
-func addReg(param *api.EventRegParams, attendeeId int64) error {
+func sessionIsExist(sessionIds []int64, eventId int64) error {
+	for _, id := range sessionIds {
+		err := sessionsDao.SessionValid(id)
+		if err != nil {
+			return err
+		}
+		err = sessionsDao.IsSessionLinkedToEvent(id, eventId)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func addReg(param *api.EventRegParams) error {
 	var (
 		sessionParam *sessionParams.SessionsRegCreate
 		regId        int64
@@ -73,7 +80,7 @@ func addReg(param *api.EventRegParams, attendeeId int64) error {
 		}
 	}()
 
-	regId, err = registrationsDao.AddRegistration(tx, attendeeId, param.TicketID)
+	regId, err = registrationsDao.AddRegistration(tx, param.AttendeeId, param.TicketID)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -95,28 +102,10 @@ func addReg(param *api.EventRegParams, attendeeId int64) error {
 func regSessions(sessions []int64, sessionParam *sessionParams.SessionsRegCreate) error {
 	for _, sessionId := range sessions {
 		sessionParam.SessionId = sessionId
-		err := sessionsDao.SessionValid(sessionId)
-		if err != nil {
-			return err
-		}
-		err = sessionsRegDao.AddSessionsReg(sessionParam)
+		err := sessionsRegDao.AddSessionsReg(sessionParam)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
-}
-
-func fetchAttendeeId(token string) (int64, error) {
-	key := fmt.Sprintf("%s%s", constant.ATTENDEE_LOGIN_PREFIX, token)
-	data, err := redisUtil.GetData(key)
-	if err != nil {
-		return 0, &attendeesError.NotLogin{}
-	}
-	id, err := strconv.ParseInt(data, 10, 64)
-	if err != nil {
-		tools.Log.Println(err.Error())
-		return 0, err
-	}
-	return id, nil
 }
