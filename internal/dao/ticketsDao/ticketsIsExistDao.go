@@ -13,7 +13,7 @@ func TicketsIsExist(id int64, eventId int64) error {
 		Where(&model.EventTickets{
 			ID:      id,
 			EventId: eventId,
-		}).
+		}, "id", "event_id").
 		First(&ticket)
 
 	if data.Error != nil {
