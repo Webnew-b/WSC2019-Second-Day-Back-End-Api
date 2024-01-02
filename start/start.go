@@ -18,7 +18,7 @@ func Init() {
 	logUtil.Log.Println("Server is Starting")
 	database.InitVal()
 	redisConn.InitVal()
-	routeInit()
+	go routeInit()
 	logUtil.Log.Println("Server is Started")
 }
 

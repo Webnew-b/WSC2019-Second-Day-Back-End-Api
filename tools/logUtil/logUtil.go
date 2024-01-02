@@ -30,6 +30,20 @@ func closeLogger() {
 	}
 }
 
+func closeDbLogger() {
+	if file, ok := DBLog.Writer().(*os.File); ok {
+		file.Close()
+	}
+}
+
+func closeRouteLogger() {
+	if file, ok := RouteLog.Writer().(*os.File); ok {
+		file.Close()
+	}
+}
+
 func Close() {
+	closeDbLogger()
+	closeRouteLogger()
 	closeLogger()
 }

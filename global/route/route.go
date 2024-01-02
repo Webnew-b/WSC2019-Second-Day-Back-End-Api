@@ -1,6 +1,7 @@
 package route
 
 import (
+	"context"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
@@ -19,6 +20,12 @@ func GetRoute() *echo.Echo {
 		panic("database not initialized")
 	}
 	return router
+}
+
+func StopEcho(ctx context.Context) {
+	if err := router.Shutdown(ctx); err != nil {
+		router.Logger.Fatal(err)
+	}
 }
 
 func StartRoute() {

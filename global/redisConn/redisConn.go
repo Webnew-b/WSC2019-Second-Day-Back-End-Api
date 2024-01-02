@@ -22,6 +22,15 @@ func GetRedis() *redis.Client {
 	return rdb
 }
 
+func StopRedis() {
+	err := rdb.Close()
+	if err != nil {
+		logUtil.Log.Panicln("Error closing Redis client:", err)
+	} else {
+		logUtil.Log.Panicln("Redis client closed successfully")
+	}
+}
+
 func crateRedisAddr() string {
 	Addr := fmt.Sprintf("%s:%d", redisConfig.Host, redisConfig.Port)
 	return Addr
