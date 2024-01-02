@@ -20,6 +20,7 @@ func Init() {
 	redisConn.InitVal()
 	go routeInit()
 	logUtil.Log.Println("Server is Started")
+	log.Println("Server is Started")
 }
 
 func routeInit() {

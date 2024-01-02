@@ -11,7 +11,7 @@ type EventRegRequestBody struct {
 }
 
 type EventRegParams struct {
-	AttendeeId int64
+	AttendeeId int64 `validate:"required"`
 	*EventRegRequestParams
 	*EventRegRequestBody
 }
