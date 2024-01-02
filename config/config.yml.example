@@ -7,7 +7,7 @@ db:
   port: 3306
   user: root
   password: 123456
-  db_name: example_db_name
+  db_name: WSC_api
   charset: utf8mb4
   loc: Local
 redis:
